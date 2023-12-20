@@ -1,70 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
-import 'localization/locale_constants.dart';
-import 'localization/localizations_delegate.dart';
+import 'provider/language_provider.dart';
 
-void main() {
-  runApp(MyApp());
+void main(){
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => LanguageProvider(),
+      child: MyApp(),
+    ),
+  );
 }
-
-class MyApp extends StatefulWidget {
-  static void setLocale(BuildContext context, Locale newLocale) {
-    var state = context.findAncestorStateOfType<_MyAppState>();
-    state?.setLocale(newLocale);
-  }
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late Locale _locale;
-
-  void setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
-  }
-
-  @override
-  void didChangeDependencies() async {
-    getLocale().then((locale) {
-      setState(() {
-        _locale = locale;
-      });
-    });
-    super.didChangeDependencies();
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      locale: _locale,
-      home: Home(),
-      supportedLocales: [
-        Locale('en', ''),
-        Locale('ar', ''),
-      ],
-      localizationsDelegates: [
-        AppLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      localeResolutionCallback: (locale, supportedLocales) {
-        for (var supportedLocale in supportedLocales) {
-          if (supportedLocale.languageCode == locale?.languageCode &&
-              supportedLocale.countryCode == locale?.countryCode) {
-            return supportedLocale;
-          }
-        }
-        return supportedLocales.first;
+
+    LanguageProvider languageProvider = Provider.of<LanguageProvider>(context);
+    languageProvider.loadSavedLanguage();
+
+    return Consumer<LanguageProvider>(
+      builder: (context, languageProvider, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Multilingual',
+          theme: ThemeData(
+            useMaterial3: true,
+          ),
+          locale: languageProvider.locale,
+          home: Home(),
+          supportedLocales: [
+            Locale('en', ''),
+            Locale('hi', ''),
+            Locale('ar', ''), // Add other supported locales as needed
+          ],
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale.languageCode == locale?.languageCode &&
+                  supportedLocale.countryCode == locale?.countryCode) {
+                return supportedLocale;
+              }
+            }
+            return supportedLocales.first;
+          },
+        );
       },
     );
   }

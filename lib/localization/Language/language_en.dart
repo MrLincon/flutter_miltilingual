@@ -2,18 +2,8 @@ import 'languages.dart';
 
 class LanguageEn extends Languages {
   @override
-  String get appName => "Multi-languages";
+  String get appName => "Multilingual";
 
   @override
-  String get labelWelcome => "Welcome";
-
-  @override
-  String get labelSelectLanguage => "Select Language";
-
-  @override
-  String get labelInfo => "This is multi-languages demo application";
-
-  @override
-  // TODO: implement labelChangeLanguage
-  String get labelChangeLanguage => "Change Language";
+  String get welcome => "Welcome";
 }

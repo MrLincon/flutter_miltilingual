@@ -5,15 +5,6 @@ class LanguageHi extends Languages {
   String get appName => "बहु भाषा";
 
   @override
-  String get labelWelcome => "स्वागत हे";
+  String get welcome => "स्वागत हे";
 
-  @override
-  String get labelSelectLanguage => "भाषा का चयन करें";
-
-  @override
-  String get labelInfo => "यह मल्टी लैंग्वेज डेमो एप्लीकेशन है";
-
-  @override
-  // TODO: implement labelChangeLanguage
-  String get labelChangeLanguage => "भाषा बदलें";
 }

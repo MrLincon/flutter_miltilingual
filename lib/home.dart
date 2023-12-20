@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_miltilingual/localization/Language/language_hi.dart';
+import 'package:provider/provider.dart';
 
-import 'localization/Language/languages.dart';
-import 'localization/locale_constants.dart';
+import 'provider/language_provider.dart';
+import 'localization/Language/language_ar.dart';
+import 'localization/Language/language_en.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,19 +17,59 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+
+    var languageProvider = Provider.of<LanguageProvider>(context);
+    var currentLanguage = languageProvider.currentLanguage;
     return Scaffold(
-      appBar: AppBar(title: Text(Languages.of(context)!.appName, style: TextStyle(color: Colors.blue),),),
+      backgroundColor: Colors.white,
+      appBar: AppBar(backgroundColor: Colors.black,title: Text(currentLanguage.appName, style: TextStyle(color: Colors.blue),),),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text( Languages.of(context)!.labelWelcome, style: TextStyle(color: Colors.black,fontSize: 40, fontWeight: FontWeight.bold),),
+          Center(
+            child: Container(color: Colors.white,
+                width: double.maxFinite,
+                child: Center(child: Text( currentLanguage.welcome, style: TextStyle(color: Colors.black,fontSize: 40, fontWeight: FontWeight.bold),))),
+          ),
+          SizedBox(height: 56,),
+
+          //English
           GestureDetector(onTap: () {
-            changeLanguage(context, "ar");
+            languageProvider.changeLanguage(LanguageEn(), "LanguageEn");
           },
             child: Container(
-              color: Colors.deepOrange,
-              child: Text("Change"),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), color: Colors.blue,),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+              child: Text("English", style: TextStyle(color: Colors.white),),
             ),
-          )
+          ),
+
+          SizedBox(height: 8,),
+
+          //Arabic
+          GestureDetector(onTap: () {
+            languageProvider.changeLanguage(LanguageAr(), "LanguageAr");
+          },
+            child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), color: Colors.blue,),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+              child: Text("Arabic", style: TextStyle(color: Colors.white),),
+            ),
+          ),
+
+          SizedBox(height: 8,),
+
+          //Hindi
+          GestureDetector(onTap: () {
+            languageProvider.changeLanguage(LanguageHi(), "LanguageHi");
+          },
+            child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), color: Colors.blue,),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+              child: Text("Hindi", style: TextStyle(color: Colors.white),),
+            ),
+          ),
         ],
       ),
     );
